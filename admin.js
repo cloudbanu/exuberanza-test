@@ -1,1208 +1,128 @@
-// Admin functionality
+// Admin functionality - Updated with sidebar and new requirements
 function loadAdminContent(content) {
     content.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Navigation Cards -->
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSetup()">
-                <div class="flex items-center">
-                    <div class="bg-blue-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Setup</h3>
-                        <p class="text-gray-600 text-sm">Manage teams, judges, competitions</p>
-                    </div>
+        <div class="flex min-h-screen bg-gray-100">
+            <!-- Sidebar -->
+            <div class="w-64 bg-white shadow-lg">
+                <div class="p-6 border-b">
+                    <h2 class="text-xl font-semibold text-gray-800">Admin Panel</h2>
                 </div>
+                <nav class="mt-6">
+                    <div class="space-y-2">
+                        <button onclick="showDashboard()" class="admin-nav-btn active" id="nav-dashboard">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Dashboard
+                        </button>
+                        <button onclick="showTeamsManagement()" class="admin-nav-btn" id="nav-teams">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Teams
+                        </button>
+                        <button onclick="showCategoriesManagement()" class="admin-nav-btn" id="nav-categories">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                            Categories
+                        </button>
+                        <button onclick="showParticipantsManagement()" class="admin-nav-btn" id="nav-participants">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Participants
+                        </button>
+                        <button onclick="showCompetitionsManagement()" class="admin-nav-btn" id="nav-competitions">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                            Competitions
+                        </button>
+                        <button onclick="showInvigilatorsManagement()" class="admin-nav-btn" id="nav-invigilators">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            Invigilators
+                        </button>
+                        <button onclick="showJudgesManagement()" class="admin-nav-btn" id="nav-judges">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Judges
+                        </button>
+                        <button onclick="showResults()" class="admin-nav-btn" id="nav-results">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Results
+                        </button>
+                        <button onclick="showSchedule()" class="admin-nav-btn" id="nav-schedule">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Schedule
+                        </button>
+                        <button onclick="showSettings()" class="admin-nav-btn" id="nav-settings">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Settings
+                        </button>
+                    </div>
+                </nav>
             </div>
 
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showDashboard()">
-                <div class="flex items-center">
-                    <div class="bg-green-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Dashboard</h3>
-                        <p class="text-gray-600 text-sm">View statistics and status</p>
-                    </div>
+            <!-- Main Content -->
+            <div class="flex-1 p-6">
+                <div id="adminMainContent">
+                    <!-- Content will be loaded here -->
                 </div>
             </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showResults()">
-                <div class="flex items-center">
-                    <div class="bg-yellow-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Results</h3>
-                        <p class="text-gray-600 text-sm">View competition results</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSchedule()">
-                <div class="flex items-center">
-                    <div class="bg-purple-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Schedule</h3>
-                        <p class="text-gray-600 text-sm">Manage competition schedule</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSettings()">
-                <div class="flex items-center">
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Settings</h3>
-                        <p class="text-gray-600 text-sm">Application settings</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="adminContent" class="mt-8">
-            <!-- Dynamic admin content will be loaded here -->
         </div>
     `;
+
+    // Add CSS for navigation
+    const style = document.createElement('style');
+    style.textContent = `
+        .admin-nav-btn {
+            width: 100%;
+            text-left: true;
+            padding: 12px 24px;
+            margin: 2px 0;
+            color: #6B7280;
+            hover:bg-gray-100;
+            hover:text-gray-900;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .admin-nav-btn:hover {
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+        .admin-nav-btn.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+    `;
+    document.head.appendChild(style);
     
     showDashboard(); // Show dashboard by default
 }
 
-async function showSetup() {
-    const adminContent = document.getElementById('adminContent');
-    adminContent.innerHTML = `
-        <div class="bg-white rounded-lg shadow-sm">
-            <div class="border-b border-gray-200">
-                <nav class="flex space-x-8" aria-label="Tabs">
-                    <button class="admin-tab-btn active" data-tab="teams">Teams</button>
-                    <button class="admin-tab-btn" data-tab="categories">Categories</button>
-                    <button class="admin-tab-btn" data-tab="participants">Participants</button>
-                    <button class="admin-tab-btn" data-tab="competitions">Competitions</button>
-                    <button class="admin-tab-btn" data-tab="invigilators">Invigilators</button>
-                    <button class="admin-tab-btn" data-tab="judges">Judges</button>
-                </nav>
-            </div>
-            <div class="p-6">
-                <div id="setupContent">
-                    <!-- Setup content will be loaded here -->
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Add tab functionality
-    const tabBtns = document.querySelectorAll('.admin-tab-btn');
-    tabBtns.forEach(btn => {
-        btn.className = 'py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => {
-                b.className = 'py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
-            });
-            btn.className = 'py-2 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600';
-            loadSetupTab(btn.dataset.tab);
-        });
-    });
-    
-    // Set active tab
-    document.querySelector('[data-tab="teams"]').className = 'py-2 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600';
-    loadSetupTab('teams');
-}
-
-async function loadSetupTab(tab) {
-    const setupContent = document.getElementById('setupContent');
-    
-    switch (tab) {
-        case 'teams':
-            await loadTeamsSetup(setupContent);
-            break;
-        case 'categories':
-            await loadCategoriesSetup(setupContent);
-            break;
-        case 'participants':
-            await loadParticipantsSetup(setupContent);
-            break;
-        case 'competitions':
-            await loadCompetitionsSetup(setupContent);
-            break;
-        case 'invigilators':
-            await loadInvigilatorsSetup(setupContent);
-            break;
-        case 'judges':
-            await loadJudgesSetup(setupContent);
-            break;
-    }
-}
-
-async function loadTeamsSetup(content) {
-    const { data: teams, error } = await supabase.from('teams').select('*').order('created_at', { ascending: false });
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Team</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <input type="text" id="teamName" placeholder="Team Name" class="p-3 border rounded-lg">
-                <input type="password" id="teamPassword" placeholder="Team Password" class="p-3 border rounded-lg">
-                <button onclick="createTeam()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Team</button>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Teams (${teams?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Points</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Leader Access</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${teams?.map(team => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${team.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">${team.total_points}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="px-2 py-1 text-xs rounded ${team.leader_access ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                        ${team.leader_access ? 'Enabled' : 'Disabled'}
-                                    </span>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="toggleLeaderAccess(${team.id}, ${!team.leader_access})" 
-                                            class="text-sm px-3 py-1 rounded ${team.leader_access ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
-                                        ${team.leader_access ? 'Disable' : 'Enable'}
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No teams found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-async function createTeam() {
-    const name = document.getElementById('teamName').value.trim();
-    const password = document.getElementById('teamPassword').value.trim();
-    
-    if (!name || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('teams')
-        .insert({ name, password });
-    
-    if (error) {
-        showNotification('Failed to create team', 'error');
-        return;
-    }
-    
-    showNotification('Team created successfully');
-    loadSetupTab('teams');
-}
-
-async function toggleLeaderAccess(teamId, access) {
-    const { error } = await supabase
-        .from('teams')
-        .update({ leader_access: access })
-        .eq('id', teamId);
-    
-    if (error) {
-        showNotification('Failed to update team access', 'error');
-        return;
-    }
-    
-    showNotification('Team access updated');
-    loadSetupTab('teams');
-}
-
-// Continue with other setup functions...
-async function showDashboard() {
-    const adminContent = document.getElementById('adminContent');
-    
-    // Fetch dashboard statistics
-    const [competitions, results, teams] = await Promise.all([
-        supabase.from('competitions').select('*'),
-        supabase.from('results').select('*'),
-        supabase.from('teams').select('*')
-    ]);
-    
-    const totalCompetitions = competitions.data?.length || 0;
-    const completedCompetitions = competitions.data?.filter(c => c.status === 'completed').length || 0;
-    const pendingResults = results.data?.filter(r => r.status === 'pending').length || 0;
-    
-    adminContent.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="flex items-center">
-                    <div class="bg-blue-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-gray-800">${totalCompetitions}</p>
-                        <p class="text-gray-600 text-sm">Total Competitions</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="flex items-center">
-                    <div class="bg-green-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-gray-800">${completedCompetitions}</p>
-                        <p class="text-gray-600 text-sm">Completed</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="flex items-center">
-                    <div class="bg-yellow-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-gray-800">${totalCompetitions - completedCompetitions}</p>
-                        <p class="text-gray-600 text-sm">Pending</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="flex items-center">
-                    <div class="bg-red-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-gray-800">${pendingResults}</p>
-                        <p class="text-gray-600 text-sm">Pending Results</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-semibold mb-4">Team Points Status</h3>
-                <div class="space-y-2">
-                    ${teams.data?.sort((a, b) => b.total_points - a.total_points).slice(0, 5).map((team, index) => `
-                        <div class="flex justify-between items-center p-2 rounded ${index === 0 ? 'bg-yellow-50' : ''}">
-                            <span class="font-medium">${index + 1}. ${team.name}</span>
-                            <span class="font-bold text-blue-600">${team.total_points} pts</span>
-                        </div>
-                    `).join('') || '<p class="text-gray-500">No teams found</p>'}
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-semibold mb-4">Recent Activities</h3>
-                <div class="space-y-2">
-                    <p class="text-sm text-gray-600">Dashboard loaded successfully</p>
-                    <p class="text-sm text-gray-600">System status: Active</p>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Admin functionality - Complete implementation
-function loadAdminContent(content) {
-    content.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Navigation Cards -->
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSetup()">
-                <div class="flex items-center">
-                    <div class="bg-blue-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Setup</h3>
-                        <p class="text-gray-600 text-sm">Manage teams, judges, competitions</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showDashboard()">
-                <div class="flex items-center">
-                    <div class="bg-green-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Dashboard</h3>
-                        <p class="text-gray-600 text-sm">View statistics and status</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showResults()">
-                <div class="flex items-center">
-                    <div class="bg-yellow-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Results</h3>
-                        <p class="text-gray-600 text-sm">View competition results</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSchedule()">
-                <div class="flex items-center">
-                    <div class="bg-purple-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Schedule</h3>
-                        <p class="text-gray-600 text-sm">Manage competition schedule</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow" onclick="showSettings()">
-                <div class="flex items-center">
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Settings</h3>
-                        <p class="text-gray-600 text-sm">Application settings</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="adminContent" class="mt-8">
-            <!-- Dynamic admin content will be loaded here -->
-        </div>
-    `;
-    
-    showDashboard(); // Show dashboard by default
-}
-
-async function showSetup() {
-    const adminContent = document.getElementById('adminContent');
-    adminContent.innerHTML = `
-        <div class="bg-white rounded-lg shadow-sm">
-            <div class="border-b border-gray-200">
-                <nav class="flex space-x-8" aria-label="Tabs">
-                    <button class="admin-tab-btn active" data-tab="teams">Teams</button>
-                    <button class="admin-tab-btn" data-tab="categories">Categories</button>
-                    <button class="admin-tab-btn" data-tab="participants">Participants</button>
-                    <button class="admin-tab-btn" data-tab="competitions">Competitions</button>
-                    <button class="admin-tab-btn" data-tab="invigilators">Invigilators</button>
-                    <button class="admin-tab-btn" data-tab="judges">Judges</button>
-                </nav>
-            </div>
-            <div class="p-6">
-                <div id="setupContent">
-                    <!-- Setup content will be loaded here -->
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Add tab functionality
-    const tabBtns = document.querySelectorAll('.admin-tab-btn');
-    tabBtns.forEach(btn => {
-        btn.className = 'py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => {
-                b.className = 'py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
-            });
-            btn.className = 'py-2 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600';
-            loadSetupTab(btn.dataset.tab);
-        });
-    });
-    
-    // Set active tab
-    document.querySelector('[data-tab="teams"]').className = 'py-2 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600';
-    loadSetupTab('teams');
-}
-
-async function loadSetupTab(tab) {
-    const setupContent = document.getElementById('setupContent');
-    
-    switch (tab) {
-        case 'teams':
-            await loadTeamsSetup(setupContent);
-            break;
-        case 'categories':
-            await loadCategoriesSetup(setupContent);
-            break;
-        case 'participants':
-            await loadParticipantsSetup(setupContent);
-            break;
-        case 'competitions':
-            await loadCompetitionsSetup(setupContent);
-            break;
-        case 'invigilators':
-            await loadInvigilatorsSetup(setupContent);
-            break;
-        case 'judges':
-            await loadJudgesSetup(setupContent);
-            break;
-    }
-}
-
-async function loadTeamsSetup(content) {
-    const { data: teams, error } = await supabase.from('teams').select('*').order('created_at', { ascending: false });
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Team</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <input type="text" id="teamName" placeholder="Team Name" class="p-3 border rounded-lg">
-                <input type="password" id="teamPassword" placeholder="Team Password" class="p-3 border rounded-lg">
-                <button onclick="createTeam()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Team</button>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Teams (${teams?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Points</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Leader Access</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${teams?.map(team => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${team.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">${team.total_points}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="px-2 py-1 text-xs rounded ${team.leader_access ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                        ${team.leader_access ? 'Enabled' : 'Disabled'}
-                                    </span>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="toggleLeaderAccess(${team.id}, ${!team.leader_access})" 
-                                            class="text-sm px-3 py-1 rounded mr-2 ${team.leader_access ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
-                                        ${team.leader_access ? 'Disable' : 'Enable'}
-                                    </button>
-                                    <button onclick="deleteTeam(${team.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No teams found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-async function createTeam() {
-    const name = document.getElementById('teamName').value.trim();
-    const password = document.getElementById('teamPassword').value.trim();
-    
-    if (!name || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('teams')
-        .insert({ name, password });
-    
-    if (error) {
-        showNotification('Failed to create team', 'error');
-        return;
-    }
-    
-    showNotification('Team created successfully');
-    document.getElementById('teamName').value = '';
-    document.getElementById('teamPassword').value = '';
-    loadSetupTab('teams');
-}
-
-async function toggleLeaderAccess(teamId, access) {
-    const { error } = await supabase
-        .from('teams')
-        .update({ leader_access: access })
-        .eq('id', teamId);
-    
-    if (error) {
-        showNotification('Failed to update team access', 'error');
-        return;
-    }
-    
-    showNotification('Team access updated');
-    loadSetupTab('teams');
-}
-
-async function deleteTeam(teamId) {
-    if (!confirm('Are you sure you want to delete this team? This will also delete all associated participants.')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('teams')
-        .delete()
-        .eq('id', teamId);
-    
-    if (error) {
-        showNotification('Failed to delete team', 'error');
-        return;
-    }
-    
-    showNotification('Team deleted successfully');
-    loadSetupTab('teams');
-}
-
-async function loadCategoriesSetup(content) {
-    const { data: categories, error } = await supabase.from('categories').select('*').order('created_at', { ascending: false });
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Category</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <input type="text" id="categoryName" placeholder="Category Name" class="p-3 border rounded-lg">
-                <div class="flex items-center space-x-4">
-                    <label class="flex items-center">
-                        <input type="checkbox" id="isGeneral" class="mr-2">
-                        <span class="text-sm">General Category</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" id="isStage" class="mr-2">
-                        <span class="text-sm">Stage Item</span>
-                    </label>
-                    <button onclick="createCategory()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create</button>
-                </div>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Categories (${categories?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${categories?.map(category => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${category.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="px-2 py-1 text-xs rounded mr-1 ${category.is_general ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
-                                        ${category.is_general ? 'General' : 'Regular'}
-                                    </span>
-                                    ${category.is_stage ? '<span class="px-2 py-1 text-xs rounded bg-purple-100 text-purple-800">Stage</span>' : ''}
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="deleteCategory(${category.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="3" class="text-center py-4 text-gray-500">No categories found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-async function createCategory() {
-    const name = document.getElementById('categoryName').value.trim();
-    const isGeneral = document.getElementById('isGeneral').checked;
-    const isStage = document.getElementById('isStage').checked;
-    
-    if (!name) {
-        showNotification('Please enter category name', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('categories')
-        .insert({ name, is_general: isGeneral, is_stage: isStage });
-    
-    if (error) {
-        showNotification('Failed to create category', 'error');
-        return;
-    }
-    
-    showNotification('Category created successfully');
-    document.getElementById('categoryName').value = '';
-    document.getElementById('isGeneral').checked = false;
-    document.getElementById('isStage').checked = false;
-    loadSetupTab('categories');
-}
-
-async function deleteCategory(categoryId) {
-    if (!confirm('Are you sure you want to delete this category?')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('categories')
-        .delete()
-        .eq('id', categoryId);
-    
-    if (error) {
-        showNotification('Failed to delete category', 'error');
-        return;
-    }
-    
-    showNotification('Category deleted successfully');
-    loadSetupTab('categories');
-}
-
-async function loadParticipantsSetup(content) {
-    const [participants, teams, categories] = await Promise.all([
-        supabase.from('participants').select('*, teams(name), categories(name)').order('created_at', { ascending: false }),
-        supabase.from('teams').select('*'),
-        supabase.from('categories').select('*')
-    ]);
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Add Participant</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
-                <input type="text" id="participantName" placeholder="Participant Name" class="p-3 border rounded-lg">
-                <select id="participantTeam" class="p-3 border rounded-lg">
-                    <option value="">Select Team</option>
-                    ${teams.data?.map(team => `<option value="${team.id}">${team.name}</option>`).join('') || ''}
-                </select>
-                <select id="participantCategory" class="p-3 border rounded-lg">
-                    <option value="">Select Category</option>
-                    ${categories.data?.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('') || ''}
-                </select>
-                <input type="text" id="chestNumber" placeholder="Chest Number" class="p-3 border rounded-lg">
-                <button onclick="addParticipant()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Add</button>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Registrations:</label>
-                    <input type="number" id="maxRegistrations" value="3" min="1" class="p-3 border rounded-lg w-full">
-                </div>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Participants (${participants.data?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Team</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Category</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Chest No.</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Registrations</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${participants.data?.map(participant => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${participant.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">${participant.teams?.name || 'N/A'}</td>
-                                <td class="border border-gray-300 px-4 py-2">${participant.categories?.name || 'N/A'}</td>
-                                <td class="border border-gray-300 px-4 py-2">${participant.chest_number || 'N/A'}</td>
-                                <td class="border border-gray-300 px-4 py-2">${participant.current_registrations}/${participant.max_registrations}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="deleteParticipant(${participant.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="6" class="text-center py-4 text-gray-500">No participants found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-async function addParticipant() {
-    const name = document.getElementById('participantName').value.trim();
-    const teamId = document.getElementById('participantTeam').value;
-    const categoryId = document.getElementById('participantCategory').value;
-    const chestNumber = document.getElementById('chestNumber').value.trim();
-    const maxRegistrations = parseInt(document.getElementById('maxRegistrations').value);
-    
-    if (!name || !teamId || !categoryId) {
-        showNotification('Please fill in all required fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('participants')
-        .insert({ 
-            name, 
-            team_id: parseInt(teamId), 
-            category_id: parseInt(categoryId),
-            chest_number: chestNumber || null,
-            max_registrations: maxRegistrations || 3
-        });
-    
-    if (error) {
-        showNotification('Failed to add participant', 'error');
-        return;
-    }
-    
-    showNotification('Participant added successfully');
-    document.getElementById('participantName').value = '';
-    document.getElementById('participantTeam').value = '';
-    document.getElementById('participantCategory').value = '';
-    document.getElementById('chestNumber').value = '';
-    document.getElementById('maxRegistrations').value = '3';
-    loadSetupTab('participants');
-}
-
-async function deleteParticipant(participantId) {
-    if (!confirm('Are you sure you want to delete this participant?')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('participants')
-        .delete()
-        .eq('id', participantId);
-    
-    if (error) {
-        showNotification('Failed to delete participant', 'error');
-        return;
-    }
-    
-    showNotification('Participant deleted successfully');
-    loadSetupTab('participants');
-}
-
-async function loadCompetitionsSetup(content) {
-    const [competitions, categories] = await Promise.all([
-        supabase.from('competitions').select('*, categories(name)').order('created_at', { ascending: false }),
-        supabase.from('categories').select('*')
-    ]);
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Competition</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <input type="text" id="competitionName" placeholder="Competition Name" class="p-3 border rounded-lg">
-                <select id="competitionCategory" class="p-3 border rounded-lg">
-                    <option value="">Select Category</option>
-                    ${categories.data?.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('') || ''}
-                </select>
-                <div class="flex items-center">
-                    <label class="flex items-center">
-                        <input type="checkbox" id="isGroupItem" class="mr-2">
-                        <span class="text-sm">Group Item</span>
-                    </label>
-                </div>
-                <button onclick="createCompetition()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create</button>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Competitions (${competitions.data?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Category</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Type</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Stage</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Schedule</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${competitions.data?.map(comp => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${comp.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">${comp.categories?.name || 'N/A'}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="px-2 py-1 text-xs rounded ${comp.is_group_item ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
-                                        ${comp.is_group_item ? 'Group' : 'Individual'}
-                                    </span>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <span class="px-2 py-1 text-xs rounded ${getStatusColor(comp.status)}">
-                                        ${comp.status}
-                                    </span>
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2">${comp.stage_number || 'N/A'}</td>
-                                <td class="border border-gray-300 px-4 py-2">${comp.scheduled_at ? new Date(comp.scheduled_at).toLocaleDateString() : 'Not scheduled'}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="deleteCompetition(${comp.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="7" class="text-center py-4 text-gray-500">No competitions found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-function getStatusColor(status) {
-    switch (status) {
-        case 'pending': return 'bg-yellow-100 text-yellow-800';
-        case 'ongoing': return 'bg-blue-100 text-blue-800';
-        case 'completed': return 'bg-green-100 text-green-800';
-        default: return 'bg-gray-100 text-gray-800';
-    }
-}
-
-async function createCompetition() {
-    const name = document.getElementById('competitionName').value.trim();
-    const categoryId = document.getElementById('competitionCategory').value;
-    const isGroupItem = document.getElementById('isGroupItem').checked;
-    
-    if (!name || !categoryId) {
-        showNotification('Please fill in all required fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('competitions')
-        .insert({ 
-            name, 
-            category_id: parseInt(categoryId),
-            is_group_item: isGroupItem
-        });
-    
-    if (error) {
-        showNotification('Failed to create competition', 'error');
-        return;
-    }
-    
-    showNotification('Competition created successfully');
-    document.getElementById('competitionName').value = '';
-    document.getElementById('competitionCategory').value = '';
-    document.getElementById('isGroupItem').checked = false;
-    loadSetupTab('competitions');
-}
-
-async function deleteCompetition(competitionId) {
-    if (!confirm('Are you sure you want to delete this competition?')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('competitions')
-        .delete()
-        .eq('id', competitionId);
-    
-    if (error) {
-        showNotification('Failed to delete competition', 'error');
-        return;
-    }
-    
-    showNotification('Competition deleted successfully');
-    loadSetupTab('competitions');
-}
-
-async function loadInvigilatorsSetup(content) {
-    const { data: invigilators, error } = await supabase.from('invigilators').select('*').order('created_at', { ascending: false });
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Invigilator</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                <input type="text" id="invigilatorName" placeholder="Name" class="p-3 border rounded-lg">
-                <input type="text" id="invigilatorUsername" placeholder="Username" class="p-3 border rounded-lg">
-                <input type="password" id="invigilatorPassword" placeholder="Password" class="p-3 border rounded-lg">
-                <button onclick="createInvigilator()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create</button>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="text-lg font-semibold mb-4">Invigilators (${invigilators?.length || 0})</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Username</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Created</th>
-                            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${invigilators?.map(invigilator => `
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2">${invigilator.name}</td>
-                                <td class="border border-gray-300 px-4 py-2">${invigilator.username}</td>
-                                <td class="border border-gray-300 px-4 py-2">${new Date(invigilator.created_at).toLocaleDateString()}</td>
-                                <td class="border border-gray-300 px-4 py-2">
-                                    <button onclick="deleteInvigilator(${invigilator.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('') || '<tr><td colspan="4" class="text-center py-4 text-gray-500">No invigilators found</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-async function createInvigilator() {
-    const name = document.getElementById('invigilatorName').value.trim();
-    const username = document.getElementById('invigilatorUsername').value.trim();
-    const password = document.getElementById('invigilatorPassword').value.trim();
-    
-    if (!name || !username || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('invigilators')
-        .insert({ name, username, password });
-    
-    if (error) {
-        showNotification('Failed to create invigilator', 'error');
-        return;
-    }
-    
-    showNotification('Invigilator created successfully');
-    document.getElementById('invigilatorName').value = '';
-    document.getElementById('invigilatorUsername').value = '';
-    document.getElementById('invigilatorPassword').value = '';
-    loadSetupTab('invigilators');
-}
-
-async function deleteInvigilator(invigilatorId) {
-    if (!confirm('Are you sure you want to delete this invigilator?')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('invigilators')
-        .delete()
-        .eq('id', invigilatorId);
-    
-    if (error) {
-        showNotification('Failed to delete invigilator', 'error');
-        return;
-    }
-    
-    showNotification('Invigilator deleted successfully');
-    loadSetupTab('invigilators');
-}
-
-async function loadJudgesSetup(content) {
-    const [judges, competitions, assignments] = await Promise.all([
-        supabase.from('judges').select('*').order('created_at', { ascending: false }),
-        supabase.from('competitions').select('*'),
-        supabase.from('competition_judges').select('*, competitions(name), judges(name)')
-    ]);
-    
-    content.innerHTML = `
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Create Judge</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                <input type="text" id="judgeName" placeholder="Name" class="p-3 border rounded-lg">
-                <input type="text" id="judgeUsername" placeholder="Username" class="p-3 border rounded-lg">
-                <input type="password" id="judgePassword" placeholder="Password" class="p-3 border rounded-lg">
-                <button onclick="createJudge()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create</button>
-            </div>
-        </div>
-        
-        <div class="mb-6">
-            <h3 class="text-lg font-semibold mb-4">Assign Judge to Competition</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <select id="assignJudge" class="p-3 border rounded-lg">
-                    <option value="">Select Judge</option>
-                    ${judges.data?.map(judge => `<option value="${judge.id}">${judge.name}</option>`).join('') || ''}
-                </select>
-                <select id="assignCompetition" class="p-3 border rounded-lg">
-                    <option value="">Select Competition</option>
-                    ${competitions.data?.map(comp => `<option value="${comp.id}">${comp.name}</option>`).join('') || ''}
-                </select>
-                <button onclick="assignJudgeToCompetition()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">Assign</button>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
-                <h3 class="text-lg font-semibold mb-4">Judges (${judges.data?.length || 0})</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                                <th class="border border-gray-300 px-4 py-2 text-left">Username</th>
-                                <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${judges.data?.map(judge => `
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">${judge.name}</td>
-                                    <td class="border border-gray-300 px-4 py-2">${judge.username}</td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <button onclick="deleteJudge(${judge.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Delete</button>
-                                    </td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="3" class="text-center py-4 text-gray-500">No judges found</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <div>
-                <h3 class="text-lg font-semibold mb-4">Judge Assignments (${assignments.data?.length || 0})</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="border border-gray-300 px-4 py-2 text-left">Judge</th>
-                                <th class="border border-gray-300 px-4 py-2 text-left">Competition</th>
-                                <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${assignments.data?.map(assignment => `
-                                <tr>
-                                    <td class="border border-gray-300 px-4 py-2">${assignment.judges?.name}</td>
-                                    <td class="border border-gray-300 px-4 py-2">${assignment.competitions?.name}</td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <button onclick="removeJudgeAssignment(${assignment.id})" class="text-sm px-3 py-1 bg-red-500 text-white rounded">Remove</button>
-                                    </td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="3" class="text-center py-4 text-gray-500">No assignments found</td></tr>'}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-async function createJudge() {
-    const name = document.getElementById('judgeName').value.trim();
-    const username = document.getElementById('judgeUsername').value.trim();
-    const password = document.getElementById('judgePassword').value.trim();
-    
-    if (!name || !username || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('judges')
-        .insert({ name, username, password });
-    
-    if (error) {
-        showNotification('Failed to create judge', 'error');
-        return;
-    }
-    
-    showNotification('Judge created successfully');
-    document.getElementById('judgeName').value = '';
-    document.getElementById('judgeUsername').value = '';
-    document.getElementById('judgePassword').value = '';
-    loadSetupTab('judges');
-}
-
-async function assignJudgeToCompetition() {
-    const judgeId = document.getElementById('assignJudge').value;
-    const competitionId = document.getElementById('assignCompetition').value;
-    
-    if (!judgeId || !competitionId) {
-        showNotification('Please select both judge and competition', 'error');
-        return;
-    }
-    
-    const { data, error } = await supabase
-        .from('competition_judges')
-        .insert({ judge_id: parseInt(judgeId), competition_id: parseInt(competitionId) });
-    
-    if (error) {
-        showNotification('Failed to assign judge', 'error');
-        return;
-    }
-    
-    showNotification('Judge assigned successfully');
-    document.getElementById('assignJudge').value = '';
-    document.getElementById('assignCompetition').value = '';
-    loadSetupTab('judges');
-}
-
-async function deleteJudge(judgeId) {
-    if (!confirm('Are you sure you want to delete this judge?')) {
-        return;
-    }
-    
-    const { error } = await supabase
-        .from('judges')
-        .delete()
-        .eq('id', judgeId);
-    
-    if (error) {
-        showNotification('Failed to delete judge', 'error');
-        return;
-    }
-    
-    showNotification('Judge deleted successfully');
-    loadSetupTab('judges');
-}
-
-async function removeJudgeAssignment(assignmentId) {
-    const { error } = await supabase
-        .from('competition_judges')
-        .delete()
-        .eq('id', assignmentId);
-    
-    if (error) {
-        showNotification('Failed to remove assignment', 'error');
-        return;
-    }
-    
-    showNotification('Assignment removed successfully');
-    loadSetupTab('judges');
+function setActiveNav(navId) {
+    document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(navId).classList.add('active');
 }
 
 async function showDashboard() {
-    const adminContent = document.getElementById('adminContent');
+    setActiveNav('nav-dashboard');
+    const content = document.getElementById('adminMainContent');
     
     // Fetch dashboard statistics
     const [competitions, results, teams, participants] = await Promise.all([
@@ -1217,7 +137,12 @@ async function showDashboard() {
     const pendingResults = results.data?.filter(r => r.status === 'pending').length || 0;
     const publishedResults = results.data?.filter(r => r.status === 'published').length || 0;
     
-    adminContent.innerHTML = `
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-600">Overview of arts festival management</p>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-white p-6 rounded-lg shadow-sm">
                 <div class="flex items-center">
@@ -1314,13 +239,844 @@ async function showDashboard() {
     `;
 }
 
-async function showResults() {
-    const adminContent = document.getElementById('adminContent');
+async function showTeamsManagement() {
+    setActiveNav('nav-teams');
+    const content = document.getElementById('adminMainContent');
+    const { data: teams, error } = await supabase.from('teams').select('*').order('created_at', { ascending: false });
     
-    adminContent.innerHTML = `
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Teams Management</h1>
+            <p class="text-gray-600">Create and manage teams</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Create Team</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <input type="text" id="teamName" placeholder="Team Name" class="p-3 border rounded-lg">
+                <input type="password" id="teamPassword" placeholder="Team Password" class="p-3 border rounded-lg">
+                <button onclick="createTeam()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Team</button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold">Teams (${teams?.length || 0})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leader Access</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${teams?.map(team => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <input type="text" id="teamName_${team.id}" value="${team.name}" class="border rounded px-2 py-1 mr-2">
+                                        <button onclick="updateTeamName(${team.id})" class="text-blue-600 hover:text-blue-800 text-sm">Update</button>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${team.total_points}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded ${team.leader_access ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                        ${team.leader_access ? 'Enabled' : 'Disabled'}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <button onclick="toggleLeaderAccess(${team.id}, ${!team.leader_access})" 
+                                            class="px-3 py-1 rounded text-sm ${team.leader_access ? 'bg-red-100 text-red-800 hover:bg-red-200' : 'bg-green-100 text-green-800 hover:bg-green-200'}">
+                                        ${team.leader_access ? 'Disable Access' : 'Enable Access'}
+                                    </button>
+                                    <button onclick="deleteTeam(${team.id})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="4" class="text-center py-8 text-gray-500">No teams found</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function updateTeamName(teamId) {
+    const newName = document.getElementById(`teamName_${teamId}`).value.trim();
+    if (!newName) {
+        showNotification('Team name cannot be empty', 'error');
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('teams')
+        .update({ name: newName })
+        .eq('id', teamId);
+    
+    if (error) {
+        showNotification('Failed to update team name', 'error');
+        return;
+    }
+    
+    showNotification('Team name updated successfully');
+}
+
+async function createTeam() {
+    const name = document.getElementById('teamName').value.trim();
+    const password = document.getElementById('teamPassword').value.trim();
+    
+    if (!name || !password) {
+        showNotification('Please fill in all fields', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('teams')
+        .insert({ name, password });
+    
+    if (error) {
+        showNotification('Failed to create team', 'error');
+        return;
+    }
+    
+    showNotification('Team created successfully');
+    document.getElementById('teamName').value = '';
+    document.getElementById('teamPassword').value = '';
+    showTeamsManagement();
+}
+
+async function toggleLeaderAccess(teamId, access) {
+    const { error } = await supabase
+        .from('teams')
+        .update({ leader_access: access })
+        .eq('id', teamId);
+    
+    if (error) {
+        showNotification('Failed to update team access', 'error');
+        return;
+    }
+    
+    showNotification('Team access updated');
+    showTeamsManagement();
+}
+
+async function deleteTeam(teamId) {
+    if (!confirm('Are you sure you want to delete this team? This will also delete all associated participants.')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('teams')
+        .delete()
+        .eq('id', teamId);
+    
+    if (error) {
+        showNotification('Failed to delete team', 'error');
+        return;
+    }
+    
+    showNotification('Team deleted successfully');
+    showTeamsManagement();
+}
+
+async function showCategoriesManagement() {
+    setActiveNav('nav-categories');
+    const content = document.getElementById('adminMainContent');
+    const { data: categories, error } = await supabase.from('categories').select('*').order('created_at', { ascending: false });
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Categories Management</h1>
+            <p class="text-gray-600">Create and manage competition categories</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Create Category</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="categoryName" placeholder="Category Name" class="p-3 border rounded-lg">
+                <div class="flex items-center">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="isGeneral" class="mr-2">
+                        <span class="text-sm">General Category</span>
+                    </label>
+                </div>
+                <button onclick="createCategory()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Category</button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold">Categories (${categories?.length || 0})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${categories?.map(category => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${category.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded ${category.is_general ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+                                        ${category.is_general ? 'General' : 'Regular'}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="deleteCategory(${category.id})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="3" class="text-center py-8 text-gray-500">No categories found</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function createCategory() {
+    const name = document.getElementById('categoryName').value.trim();
+    const isGeneral = document.getElementById('isGeneral').checked;
+    
+    if (!name) {
+        showNotification('Please enter category name', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('categories')
+        .insert({ name, is_general: isGeneral });
+    
+    if (error) {
+        showNotification('Failed to create category', 'error');
+        return;
+    }
+    
+    showNotification('Category created successfully');
+    document.getElementById('categoryName').value = '';
+    document.getElementById('isGeneral').checked = false;
+    showCategoriesManagement();
+}
+
+async function deleteCategory(categoryId) {
+    if (!confirm('Are you sure you want to delete this category?')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', categoryId);
+    
+    if (error) {
+        showNotification('Failed to delete category', 'error');
+        return;
+    }
+    
+    showNotification('Category deleted successfully');
+    showCategoriesManagement();
+}
+
+async function showParticipantsManagement() {
+    setActiveNav('nav-participants');
+    const content = document.getElementById('adminMainContent');
+    
+    const [categories, teams] = await Promise.all([
+        supabase.from('categories').select('*').eq('is_general', false),
+        supabase.from('teams').select('*').order('id')
+    ]);
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Participants Management</h1>
+            <p class="text-gray-600">Manage participants by category</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Select Category</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select id="selectedCategory" onchange="loadCategoryParticipants()" class="p-3 border rounded-lg">
+                    <option value="">Select Category</option>
+                    ${categories.data?.map(cat => `<option value="${cat.id}">${cat.name}</option>`).join('') || ''}
+                </select>
+            </div>
+        </div>
+
+        <div id="participantsContent">
+            <div class="text-center py-8 text-gray-500">
+                Select a category to view and manage participants
+            </div>
+        </div>
+    `;
+}
+
+async function loadCategoryParticipants() {
+    const categoryId = document.getElementById('selectedCategory').value;
+    if (!categoryId) return;
+    
+    const [participants, teams, category] = await Promise.all([
+        supabase.from('participants').select('*, teams(name)').eq('category_id', categoryId).order('chest_number'),
+        supabase.from('teams').select('*').order('id'),
+        supabase.from('categories').select('*').eq('id', categoryId).single()
+    ]);
+    
+    document.getElementById('participantsContent').innerHTML = `
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Add Participant to ${category.data?.name}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="participantName" placeholder="Participant Name" class="p-3 border rounded-lg">
+                <select id="participantTeam" class="p-3 border rounded-lg">
+                    <option value="">Select Team</option>
+                    ${teams.data?.map(team => `<option value="${team.id}">${team.name}</option>`).join('') || ''}
+                </select>
+                <button onclick="addParticipant(${categoryId})" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Add Participant</button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold">Participants in ${category.data?.name} (${participants.data?.length || 0})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chest No.</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage Registrations</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Non-Stage Registrations</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${participants.data?.map(participant => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${participant.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${participant.teams?.name || 'N/A'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${participant.chest_number || 'N/A'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${participant.stage_registrations}/3</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${participant.non_stage_registrations}/5</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="deleteParticipant(${participant.id}, ${categoryId})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="6" class="text-center py-8 text-gray-500">No participants found</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function addParticipant(categoryId) {
+    const name = document.getElementById('participantName').value.trim();
+    const teamId = document.getElementById('participantTeam').value;
+    
+    if (!name || !teamId) {
+        showNotification('Please fill in all required fields', 'error');
+        return;
+    }
+    
+    // Generate chest number
+    const team = await supabase.from('teams').select('id').eq('id', teamId).single();
+    const teamIndex = parseInt(teamId);
+    const existingParticipants = await supabase.from('participants').select('chest_number').like('chest_number', `${teamIndex}%`);
+    const chestNumber = `${teamIndex}${String(existingParticipants.data?.length + 1).padStart(2, '0')}`;
+    
+    const { data, error } = await supabase
+        .from('participants')
+        .insert({ 
+            name, 
+            team_id: parseInt(teamId), 
+            category_id: parseInt(categoryId),
+            chest_number: chestNumber
+        });
+    
+    if (error) {
+        showNotification('Failed to add participant', 'error');
+        return;
+    }
+    
+    showNotification('Participant added successfully');
+    document.getElementById('participantName').value = '';
+    document.getElementById('participantTeam').value = '';
+    loadCategoryParticipants();
+}
+
+async function deleteParticipant(participantId, categoryId) {
+    if (!confirm('Are you sure you want to delete this participant?')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('participants')
+        .delete()
+        .eq('id', participantId);
+    
+    if (error) {
+        showNotification('Failed to delete participant', 'error');
+        return;
+    }
+    
+    showNotification('Participant deleted successfully');
+    loadCategoryParticipants();
+}
+
+async function showCompetitionsManagement() {
+    setActiveNav('nav-competitions');
+    const content = document.getElementById('adminMainContent');
+    
+    const { data: categories } = await supabase.from('categories').select('*');
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Competitions Management</h1>
+            <p class="text-gray-600">Manage competitions by category</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Select Category</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select id="selectedCompetitionCategory" onchange="loadCategoryCompetitions()" class="p-3 border rounded-lg">
+                    <option value="">Select Category</option>
+                    ${categories?.map(cat => `<option value="${cat.id}">${cat.name} ${cat.is_general ? '(General)' : ''}</option>`).join('') || ''}
+                </select>
+            </div>
+        </div>
+
+        <div id="competitionsContent">
+            <div class="text-center py-8 text-gray-500">
+                Select a category to view and manage competitions
+            </div>
+        </div>
+    `;
+}
+
+async function loadCategoryCompetitions() {
+    const categoryId = document.getElementById('selectedCompetitionCategory').value;
+    if (!categoryId) return;
+    
+    const [competitions, category] = await Promise.all([
+        supabase.from('competitions').select('*, categories(name)').eq('category_id', categoryId).order('created_at', { ascending: false }),
+        supabase.from('categories').select('*').eq('id', categoryId).single()
+    ]);
+    
+    document.getElementById('competitionsContent').innerHTML = `
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Add Competition to ${category.data?.name}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" id="competitionName" placeholder="Competition Name" class="p-3 border rounded-lg">
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="isGroupItem" class="mr-2">
+                        <span class="text-sm">Group Item</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" id="isStageItem" class="mr-2">
+                        <span class="text-sm">Stage Item</span>
+                    </label>
+                </div>
+                <button onclick="addCompetition(${categoryId})" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Add Competition</button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold">Competitions in ${category.data?.name} (${competitions.data?.length || 0})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${competitions.data?.map(comp => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${comp.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="space-x-1">
+                                        <span class="px-2 py-1 text-xs rounded ${comp.is_group_item ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
+                                            ${comp.is_group_item ? 'Group' : 'Individual'}
+                                        </span>
+                                        ${comp.is_stage_item ? '<span class="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Stage</span>' : '<span class="px-2 py-1 text-xs rounded bg-orange-100 text-orange-800">Non-Stage</span>'}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded ${getStatusColor(comp.status)}">
+                                        ${comp.status}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${comp.scheduled_at ? new Date(comp.scheduled_at).toLocaleDateString() : 'Not scheduled'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="deleteCompetition(${comp.id}, ${categoryId})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="5" class="text-center py-8 text-gray-500">No competitions found</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function getStatusColor(status) {
+    switch (status) {
+        case 'pending': return 'bg-yellow-100 text-yellow-800';
+        case 'ongoing': return 'bg-blue-100 text-blue-800';
+        case 'completed': return 'bg-green-100 text-green-800';
+        default: return 'bg-gray-100 text-gray-800';
+    }
+}
+
+async function addCompetition(categoryId) {
+    const name = document.getElementById('competitionName').value.trim();
+    const isGroupItem = document.getElementById('isGroupItem').checked;
+    const isStageItem = document.getElementById('isStageItem').checked;
+    
+    if (!name) {
+        showNotification('Please enter competition name', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('competitions')
+        .insert({ 
+            name, 
+            category_id: parseInt(categoryId),
+            is_group_item: isGroupItem,
+            is_stage_item: isStageItem
+        });
+    
+    if (error) {
+        showNotification('Failed to create competition', 'error');
+        return;
+    }
+    
+    showNotification('Competition created successfully');
+    document.getElementById('competitionName').value = '';
+    document.getElementById('isGroupItem').checked = false;
+    document.getElementById('isStageItem').checked = false;
+    loadCategoryCompetitions();
+}
+
+async function deleteCompetition(competitionId, categoryId) {
+    if (!confirm('Are you sure you want to delete this competition?')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('competitions')
+        .delete()
+        .eq('id', competitionId);
+    
+    if (error) {
+        showNotification('Failed to delete competition', 'error');
+        return;
+    }
+    
+    showNotification('Competition deleted successfully');
+    loadCategoryCompetitions();
+}
+
+async function showInvigilatorsManagement() {
+    setActiveNav('nav-invigilators');
+    const content = document.getElementById('adminMainContent');
+    const { data: invigilators, error } = await supabase.from('invigilators').select('*').order('created_at', { ascending: false });
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Invigilators Management</h1>
+            <p class="text-gray-600">Create and manage invigilators</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Create Invigilator</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="invigilatorName" placeholder="Name" class="p-3 border rounded-lg">
+                <input type="password" id="invigilatorPassword" placeholder="Password" class="p-3 border rounded-lg">
+                <button onclick="createInvigilator()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Invigilator</button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-semibold">Invigilators (${invigilators?.length || 0})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${invigilators?.map(invigilator => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${invigilator.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(invigilator.created_at).toLocaleDateString()}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="deleteInvigilator(${invigilator.id})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="3" class="text-center py-8 text-gray-500">No invigilators found</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function createInvigilator() {
+    const name = document.getElementById('invigilatorName').value.trim();
+    const password = document.getElementById('invigilatorPassword').value.trim();
+    
+    if (!name || !password) {
+        showNotification('Please fill in all fields', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('invigilators')
+        .insert({ name, password });
+    
+    if (error) {
+        showNotification('Failed to create invigilator', 'error');
+        return;
+    }
+    
+    showNotification('Invigilator created successfully');
+    document.getElementById('invigilatorName').value = '';
+    document.getElementById('invigilatorPassword').value = '';
+    showInvigilatorsManagement();
+}
+
+async function deleteInvigilator(invigilatorId) {
+    if (!confirm('Are you sure you want to delete this invigilator?')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('invigilators')
+        .delete()
+        .eq('id', invigilatorId);
+    
+    if (error) {
+        showNotification('Failed to delete invigilator', 'error');
+        return;
+    }
+    
+    showNotification('Invigilator deleted successfully');
+    showInvigilatorsManagement();
+}
+
+async function showJudgesManagement() {
+    setActiveNav('nav-judges');
+    const content = document.getElementById('adminMainContent');
+    
+    const [judges, competitions, assignments] = await Promise.all([
+        supabase.from('judges').select('*').order('created_at', { ascending: false }),
+        supabase.from('competitions').select('*'),
+        supabase.from('competition_judges').select('*, competitions(name), judges(name)')
+    ]);
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Judges Management</h1>
+            <p class="text-gray-600">Create and manage judges</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Create Judge</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="judgeName" placeholder="Name" class="p-3 border rounded-lg">
+                <input type="password" id="judgePassword" placeholder="Password" class="p-3 border rounded-lg">
+                <button onclick="createJudge()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Create Judge</button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Assign Judge to Competition</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <select id="assignJudge" class="p-3 border rounded-lg">
+                    <option value="">Select Judge</option>
+                    ${judges.data?.map(judge => `<option value="${judge.id}">${judge.name}</option>`).join('') || ''}
+                </select>
+                <select id="assignCompetition" class="p-3 border rounded-lg">
+                    <option value="">Select Competition</option>
+                    ${competitions.data?.map(comp => `<option value="${comp.id}">${comp.name}</option>`).join('') || ''}
+                </select>
+                <button onclick="assignJudgeToCompetition()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">Assign</button>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="p-6 border-b">
+                    <h3 class="text-lg font-semibold">Judges (${judges.data?.length || 0})</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${judges.data?.map(judge => `
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${judge.name}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button onclick="deleteJudge(${judge.id})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="2" class="text-center py-8 text-gray-500">No judges found</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="p-6 border-b">
+                    <h3 class="text-lg font-semibold">Judge Assignments (${assignments.data?.length || 0})</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judge</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Competition</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${assignments.data?.map(assignment => `
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${assignment.judges?.name}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${assignment.competitions?.name}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button onclick="removeJudgeAssignment(${assignment.id})" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Remove</button>
+                                    </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="3" class="text-center py-8 text-gray-500">No assignments found</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function createJudge() {
+    const name = document.getElementById('judgeName').value.trim();
+    const password = document.getElementById('judgePassword').value.trim();
+    
+    if (!name || !password) {
+        showNotification('Please fill in all fields', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('judges')
+        .insert({ name, password });
+    
+    if (error) {
+        showNotification('Failed to create judge', 'error');
+        return;
+    }
+    
+    showNotification('Judge created successfully');
+    document.getElementById('judgeName').value = '';
+    document.getElementById('judgePassword').value = '';
+    showJudgesManagement();
+}
+
+async function assignJudgeToCompetition() {
+    const judgeId = document.getElementById('assignJudge').value;
+    const competitionId = document.getElementById('assignCompetition').value;
+    
+    if (!judgeId || !competitionId) {
+        showNotification('Please select both judge and competition', 'error');
+        return;
+    }
+    
+    const { data, error } = await supabase
+        .from('competition_judges')
+        .insert({ judge_id: parseInt(judgeId), competition_id: parseInt(competitionId) });
+    
+    if (error) {
+        showNotification('Failed to assign judge', 'error');
+        return;
+    }
+    
+    showNotification('Judge assigned successfully');
+    document.getElementById('assignJudge').value = '';
+    document.getElementById('assignCompetition').value = '';
+    showJudgesManagement();
+}
+
+async function deleteJudge(judgeId) {
+    if (!confirm('Are you sure you want to delete this judge?')) {
+        return;
+    }
+    
+    const { error } = await supabase
+        .from('judges')
+        .delete()
+        .eq('id', judgeId);
+    
+    if (error) {
+        showNotification('Failed to delete judge', 'error');
+        return;
+    }
+    
+    showNotification('Judge deleted successfully');
+    showJudgesManagement();
+}
+
+async function removeJudgeAssignment(assignmentId) {
+    const { error } = await supabase
+        .from('competition_judges')
+        .delete()
+        .eq('id', assignmentId);
+    
+    if (error) {
+        showNotification('Failed to remove assignment', 'error');
+        return;
+    }
+    
+    showNotification('Assignment removed successfully');
+    showJudgesManagement();
+}
+
+async function showResults() {
+    setActiveNav('nav-results');
+    const content = document.getElementById('adminMainContent');
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Results - Password Protected</h1>
+            <p class="text-gray-600">View competition results and rankings</p>
+        </div>
+
         <div class="bg-white rounded-lg shadow-sm p-6">
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-4">Results - Password Protected</h2>
                 <div class="max-w-md">
                     <input type="password" id="resultsPassword" placeholder="Enter password" class="p-3 border rounded-lg w-full mb-4">
                     <button onclick="verifyResultsPassword()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 w-full">
@@ -1357,10 +1113,6 @@ async function loadResultsContent() {
     ]);
     
     // Get stage and non-stage categories
-    const stageCategories = categories.data?.filter(c => c.is_stage && !c.is_general) || [];
-    const nonStageCategories = categories.data?.filter(c => !c.is_stage && !c.is_general) || [];
-    
-    // Calculate Kalaprathipa (top scorer in stage items)
     const stageResults = await supabase
         .from('results')
         .select(`
@@ -1374,12 +1126,12 @@ async function loadResultsContent() {
     const nonStagePoints = {};
     
     stageResults.data?.forEach(result => {
-        if (result.competitions?.categories?.is_stage && !result.competitions?.categories?.is_general) {
+        if (result.competitions?.is_stage_item && !result.competitions?.categories?.is_general) {
             const teamName = result.participants?.teams?.name;
             if (teamName) {
                 stagePoints[teamName] = (stagePoints[teamName] || 0) + (result.team_points || 0);
             }
-        } else if (!result.competitions?.categories?.is_stage && !result.competitions?.categories?.is_general) {
+        } else if (!result.competitions?.is_stage_item && !result.competitions?.categories?.is_general) {
             const teamName = result.participants?.teams?.name;
             if (teamName) {
                 nonStagePoints[teamName] = (nonStagePoints[teamName] || 0) + (result.team_points || 0);
@@ -1419,36 +1171,36 @@ async function loadResultsContent() {
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Points</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage Points</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Non-Stage Points</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Points</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage Points</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Non-Stage Points</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         ${teams.data?.map((team, index) => `
                             <tr class="${index < 3 ? 'bg-yellow-50' : ''}">
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="text-sm font-medium text-gray-900">
                                         ${index + 1}
                                         ${index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
                                     </span>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">${team.name}</div>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 font-semibold">${team.total_points}</div>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">${stagePoints[team.name] || 0}</div>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">${nonStagePoints[team.name] || 0}</div>
                                 </td>
                             </tr>
-                        `).join('') || '<tr><td colspan="5" class="text-center py-4 text-gray-500">No teams found</td></tr>'}
+                        `).join('') || '<tr><td colspan="5" class="text-center py-8 text-gray-500">No teams found</td></tr>'}
                     </tbody>
                 </table>
             </div>
@@ -1457,7 +1209,8 @@ async function loadResultsContent() {
 }
 
 async function showSchedule() {
-    const adminContent = document.getElementById('adminContent');
+    setActiveNav('nav-schedule');
+    const content = document.getElementById('adminMainContent');
     
     const [competitions, invigilators, schedules] = await Promise.all([
         supabase.from('competitions').select('*, categories(name)'),
@@ -1465,68 +1218,67 @@ async function showSchedule() {
         supabase.from('competitions').select('*, competition_invigilators(*, invigilators(name))').order('scheduled_at', { ascending: true })
     ]);
     
-    adminContent.innerHTML = `
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Competition Schedule</h1>
+            <p class="text-gray-600">Manage competition scheduling</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">Schedule Competition</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <select id="scheduleCompetition" class="p-3 border rounded-lg">
+                    <option value="">Select Competition</option>
+                    ${competitions.data?.map(comp => `<option value="${comp.id}">${comp.name} (${comp.categories?.name})</option>`).join('') || ''}
+                </select>
+                <input type="datetime-local" id="scheduleDateTime" class="p-3 border rounded-lg">
+                <input type="text" id="stageNumber" placeholder="Stage Number" class="p-3 border rounded-lg">
+                <select id="scheduleInvigilator" class="p-3 border rounded-lg">
+                    <option value="">Select Invigilator</option>
+                    ${invigilators.data?.map(inv => `<option value="${inv.id}">${inv.name}</option>`).join('') || ''}
+                </select>
+                <button onclick="scheduleCompetition()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Schedule</button>
+            </div>
+        </div>
+        
         <div class="bg-white rounded-lg shadow-sm">
             <div class="p-6 border-b">
-                <h2 class="text-xl font-semibold">Competition Schedule Management</h2>
+                <h3 class="text-lg font-semibold">Scheduled Competitions</h3>
             </div>
-            
-            <div class="p-6">
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold mb-4">Schedule Competition</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <select id="scheduleCompetition" class="p-3 border rounded-lg">
-                            <option value="">Select Competition</option>
-                            ${competitions.data?.map(comp => `<option value="${comp.id}">${comp.name} (${comp.categories?.name})</option>`).join('') || ''}
-                        </select>
-                        <input type="datetime-local" id="scheduleDateTime" class="p-3 border rounded-lg">
-                        <input type="text" id="stageNumber" placeholder="Stage Number" class="p-3 border rounded-lg">
-                        <select id="scheduleInvigilator" class="p-3 border rounded-lg">
-                            <option value="">Select Invigilator</option>
-                            ${invigilators.data?.map(inv => `<option value="${inv.id}">${inv.name}</option>`).join('') || ''}
-                        </select>
-                        <button onclick="scheduleCompetition()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Schedule</button>
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Scheduled Competitions</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-50">
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Competition</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Category</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Date & Time</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Stage</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Invigilator</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
-                                    <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${schedules.data?.map(comp => `
-                                    <tr>
-                                        <td class="border border-gray-300 px-4 py-2">${comp.name}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${comp.categories?.name || 'N/A'}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${comp.scheduled_at ? new Date(comp.scheduled_at).toLocaleString() : 'Not scheduled'}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${comp.stage_number || 'N/A'}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${comp.competition_invigilators?.[0]?.invigilators?.name || 'Not assigned'}</td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <span class="px-2 py-1 text-xs rounded ${getStatusColor(comp.status)}">
-                                                ${comp.status}
-                                            </span>
-                                        </td>
-                                        <td class="border border-gray-300 px-4 py-2">
-                                            <button onclick="updateCompetitionStatus('${comp.id}', 'ongoing')" class="text-xs px-2 py-1 bg-blue-500 text-white rounded mr-1">Start</button>
-                                            <button onclick="updateCompetitionStatus('${comp.id}', 'completed')" class="text-xs px-2 py-1 bg-green-500 text-white rounded">Complete</button>
-                                        </td>
-                                    </tr>
-                                `).join('') || '<tr><td colspan="7" class="text-center py-4 text-gray-500">No competitions scheduled</td></tr>'}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Competition</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invigilator</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${schedules.data?.map(comp => `
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${comp.name}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${comp.categories?.name || 'N/A'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${comp.scheduled_at ? new Date(comp.scheduled_at).toLocaleString() : 'Not scheduled'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${comp.stage_number || 'N/A'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${comp.competition_invigilators?.[0]?.invigilators?.name || 'Not assigned'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded ${getStatusColor(comp.status)}">
+                                        ${comp.status}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <button onclick="updateCompetitionStatus('${comp.id}', 'ongoing')" class="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">Start</button>
+                                    <button onclick="updateCompetitionStatus('${comp.id}', 'completed')" class="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600">Complete</button>
+                                </td>
+                            </tr>
+                        `).join('') || '<tr><td colspan="7" class="text-center py-8 text-gray-500">No competitions scheduled</td></tr>'}
+                    </tbody>
+                </table>
             </div>
         </div>
     `;
@@ -1588,63 +1340,104 @@ async function updateCompetitionStatus(competitionId, status) {
 }
 
 async function showSettings() {
-    const adminContent = document.getElementById('adminContent');
+    setActiveNav('nav-settings');
+    const content = document.getElementById('adminMainContent');
     
-    adminContent.innerHTML = `
-        <div class="bg-white rounded-lg shadow-sm">
-            <div class="p-6 border-b">
-                <h2 class="text-xl font-semibold">Application Settings</h2>
+    const settings = await supabase.from('settings').select('*');
+    const maxStage = settings.data?.find(s => s.key === 'max_stage_registrations')?.value || '3';
+    const maxNonStage = settings.data?.find(s => s.key === 'max_non_stage_registrations')?.value || '5';
+    
+    content.innerHTML = `
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Settings</h1>
+            <p class="text-gray-600">Application configuration and settings</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold mb-4">Participant Registration Limits</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Max Stage Item Registrations:</label>
+                        <input type="number" id="maxStageReg" value="${maxStage}" min="1" class="p-3 border rounded-lg w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Max Non-Stage Item Registrations:</label>
+                        <input type="number" id="maxNonStageReg" value="${maxNonStage}" min="1" class="p-3 border rounded-lg w-full">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="updateRegistrationLimits()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 w-full">Update Limits</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold mb-4">Team Leader Access Control</h3>
+                <div class="space-x-4">
+                    <button onclick="enableAllTeamAccess()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                        Enable All Teams
+                    </button>
+                    <button onclick="disableAllTeamAccess()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+                        Disable All Teams
+                    </button>
+                </div>
+                <p class="text-sm text-gray-600 mt-2">Control access to setup for team leaders</p>
             </div>
             
-            <div class="p-6 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold mb-4">Team Leader Access Control</h3>
-                        <div class="space-y-2">
-                            <button onclick="enableAllTeamAccess()" class="bg-green-600 text-white px-4 py-2 rounded mr-2">
-                                Enable All Teams
-                            </button>
-                            <button onclick="disableAllTeamAccess()" class="bg-red-600 text-white px-4 py-2 rounded">
-                                Disable All Teams
-                            </button>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-2">Control access to setup for team leaders</p>
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold mb-4">System Information</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Version:</span>
+                        <span>2.0.0</span>
                     </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold mb-4">System Information</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span>Version:</span>
-                                <span>1.0.0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Database:</span>
-                                <span class="text-green-600">Connected</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Last Updated:</span>
-                                <span>${new Date().toLocaleDateString()}</span>
-                            </div>
-                        </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Database:</span>
+                        <span class="text-green-600">Connected</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Last Updated:</span>
+                        <span>${new Date().toLocaleDateString()}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Status:</span>
+                        <span class="text-green-600">Active</span>
                     </div>
                 </div>
-                
-                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <h3 class="text-lg font-semibold text-red-800 mb-4">Danger Zone</h3>
-                    <div class="space-y-2">
-                        <button onclick="resetAllResults()" class="bg-red-600 text-white px-4 py-2 rounded mr-2">
-                            Reset All Results
-                        </button>
-                        <button onclick="clearAllData()" class="bg-red-800 text-white px-4 py-2 rounded">
-                            Clear All Data
-                        </button>
-                    </div>
-                    <p class="text-sm text-red-600 mt-2">These actions cannot be undone. Use with extreme caution.</p>
+            </div>
+            
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-red-800 mb-4">Danger Zone</h3>
+                <div class="space-x-4">
+                    <button onclick="resetAllResults()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+                        Reset All Results
+                    </button>
+                    <button onclick="clearAllData()" class="bg-red-800 text-white px-6 py-3 rounded-lg hover:bg-red-900">
+                        Clear All Data
+                    </button>
                 </div>
+                <p class="text-sm text-red-600 mt-2">These actions cannot be undone. Use with extreme caution.</p>
             </div>
         </div>
     `;
+}
+
+async function updateRegistrationLimits() {
+    const maxStage = document.getElementById('maxStageReg').value;
+    const maxNonStage = document.getElementById('maxNonStageReg').value;
+    
+    const updates = [
+        { key: 'max_stage_registrations', value: maxStage },
+        { key: 'max_non_stage_registrations', value: maxNonStage }
+    ];
+    
+    for (const update of updates) {
+        await supabase
+            .from('settings')
+            .upsert(update, { onConflict: 'key' });
+    }
+    
+    showNotification('Registration limits updated successfully');
 }
 
 async function enableAllTeamAccess() {
